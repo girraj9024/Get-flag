@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flag</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+        <input type="text" id="country-input" placeholder="Enter a country name" />
+        <button id="country-button">Find Flag</button>
+        <div class="right"></div>
+    
+
+   <script>
+
+getCodes();
+
+const button = document.querySelector("button");
+const input = document.querySelector("input");
+const rightDiv = document.querySelector(".right");
+let countryObj = {};
+let code = "";
+
+button.addEventListener("click", () => {
+  if (input.value === "") return;
+  else {
+    if (input.value.length === 0) {
+      rightDiv.innerHTML = "";
+      const para = document.createElement("p");
+      para. innerText = "No Flag Found";
+      rightDiv.append(para);
+    } else {
+      const capitalCountryName = capitalize(input.value);
+      console.log(countryObj)
+      for (let x in countryObj) {
+        if (countryObj[x].toLowerCase() === capitalCountryName.toLowerCase())
+
+         {
+            console.log(countryObj[x])
+          code = x;
+          console.log(code)
+          break;
+        }
+      }
+      if (code.length === 0) {
+        rightDiv.innerHTML = "";
+        const para = document.createElement("p");
+        para. innerText = "No Flag Found";
+        rightDiv.append(para);
+      } else {
+        rightDiv.innerHTML = "";
+        const img = document.createElement("img");
+        img.src = "https://flagcdn.com/w2560/" + code + ".png";
+        rightDiv.append(img);
+      }
+    }
+  }
+});
+
+function getCodes() {
+  fetch("https://flagcdn.com/en/codes.json")
+    .then((response) => {
+      return response.json();
+    })
+    .then((result) => {
+      countryObj = result;
+      console.log(countryObj)
+    });
+}
+
+function capitalize(name) {
+  const nameArr = name.split("");
+  const firstLetter = nameArr.shift();
+  nameArr.unshift(firstLetter.toUpperCase());
+  return nameArr.join("");
+}
+      </script>
+</body>
+</html>
